@@ -1,10 +1,17 @@
-# Zigbolge
+# Zigbolge v2.0 — Motores Malbolge Classic & Unshackled en Zig
 
-Runtimes de Malbolge de alta velocidad en Zig (0.16+). Miembro en Zig de la familia de motores nativos ISyCo (`Pibolge`, `Fortranbolge`, `Rustbolge`, `Cobolge`).
+[![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)](README.md)
+[![Zig](https://img.shields.io/badge/Zig-0.16%20%7C%200.17-orange.svg)](https://ziglang.org)
+[![Status](https://img.shields.io/badge/status-verified--gate-brightgreen.svg)](README.md)
 
-Incluye soporte dual:
-1. **`zigbolge` (Classic):** Motor canónico Ben Olmstead de 10 trits ($3^{10} = 59{,}049$ celdas) con semántica exacta de EOF ($a = 59048$) y tabla Crazy acelerada por cuadrícula base-9.
-2. **`zigbolge19` (Unshackled):** Motor libre de 19 trits ($3^{19} = 1{,}162{,}261{,}467$ celdas) con paginación perezosa `64 KiB`, decodificación fast20 regional por tercios (`offs[]`) y cifrado continuo extendido (135 caracteres).
+Runtimes nativos de Malbolge de ultra-alto rendimiento en Zig (0.16+). Miembro en Zig de la familia de motores nativos ISyCo (`Rustbolge`, `Cobolge`, `Fortranbolge`, `Pibolge`, `Wasmbolge`).
+
+## Novedades en v2.0
+
+- **Arquitectura Dual Integrada:**
+  1. **`zigbolge` (Classic):** Motor canónico Ben Olmstead de 10 trits ($3^{10} = 59{,}049$ celdas) con semántica estricta de EOF ($a = 59048$) y operación `crazy` optimizada a $O(1)$ por cuadrícula base-9 sin cuotas comptime.
+  2. **`zigbolge19` (Unshackled):** Motor de 19 trits ($3^{19} = 1{,}162{,}261{,}467$ celdas) con paginación perezosa `64 KiB`, decodificación fast20 regional por tercios (`offs[]`) y tabla continua de cifrado extendido (135 caracteres).
+- **Harness de Construcción Zig 0.16:** Soporte nativo para `zig build` y `zig build test` sin artefactos heredados de Windows.
 
 ## Compilación
 
