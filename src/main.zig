@@ -27,8 +27,25 @@ pub fn main(init: std.process.Init) !void {
         std.debug.print("error: empty program\n", .{});
         return;
     }
+    // Zig 0.16: stdin se lee via File.stdin().reader(io, buffer) + readSliceShort
+    // hasta EndOfStream (esta std no tiene read-to-end directo). Buffers
+    // separados: el del reader y el destino nunca son el mismo slice.
+    const stdin = std.Io.File.stdin();
+    var stdin_buf: [65536]u8 = undefined;
+    var reader = stdin.reader(init.io, &stdin_buf);
+    var tmp_buf: [65536]u8 = undefined;
+    var input_list: std.ArrayList(u8) = .empty;
+    while (true) {
+        const got = reader.interface.readSliceShort(&tmp_buf) catch |e| switch (e) {
+            error.ReadFailed => return e,
+            else => unreachable,
+        };
+        if (got == 0) break;
+        try input_list.appendSlice(alloc, tmp_buf[0..got]);
+        if (got < tmp_buf.len) break; // fin de stream: lectura corta
+    }
     var machine = vm.Vm{};
-    const outcome = machine.run(cells_buf[0..n], "", max_steps);
+    const outcome = machine.run(cells_buf[0..n], input_list.items, max_steps);
     const stdout = std.Io.File.stdout();
     try stdout.writeStreamingAll(init.io, machine.output[0..outcome.output_len]);
     if (outcome.output_len > 0) try stdout.writeStreamingAll(init.io, "\n");
